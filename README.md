@@ -1,4 +1,4 @@
-# Healthcare RAG Agent 🤖
+# 🤖 Healthcare RAG Agent 
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-Latest-green.svg)](https://langchain.com/)
