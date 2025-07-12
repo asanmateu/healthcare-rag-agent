@@ -1,39 +1,68 @@
 # Healthcare RAG Agent 🤖
 
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![LangChain](https://img.shields.io/badge/LangChain-Latest-green.svg)](https://langchain.com/)
+[![Neo4j](https://img.shields.io/badge/Neo4j-5.0+-blue.svg)](https://neo4j.com/)
+[![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://www.docker.com/)
+
 A Retrieval-Augmented Generation (RAG) agent designed for healthcare information querying, built with LangChain and Neo4j knowledge graphs.
 
-## Overview
+## 📋 Table of Contents
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Architecture](#architecture)
+- [Prerequisites](#-prerequisites)
+- [Quick Start](#-quick-start)
+- [Example Queries](#-example-queries)
+- [Database Design](#database-design)
+- [Technical Stack](#technical-stack)
+- [Acknowledgments](#acknowledgments)
+
+## 🎯 Overview
 
 This project implements a healthcare-focused RAG chatbot that leverages LangChain's capabilities for natural language processing and Neo4j's graph database for structured healthcare data storage. The application provides an intuitive interface for querying complex healthcare relationships and information.
 
 Based on Real Python's comprehensive LLM RAG Chatbot [tutorial](https://realpython.com/build-llm-rag-chatbot-with-langchain), this implementation extends the foundational concepts with healthcare-specific data modeling and query optimization.
 
-## Key Features
+## ✨ Key Features
 
-- **Knowledge Graph Integration**: Utilizes Neo4j for efficient healthcare data relationship mapping
-- **RESTful API**: FastAPI-powered backend for scalable interactions
-- **Interactive UI**: Streamlit-based user interface for seamless user experience
-- **Containerized Deployment**: Docker-based architecture for consistent development and deployment
+✅ **Knowledge Graph Integration** - Neo4j for healthcare data relationships  
+✅ **RESTful API** - FastAPI-powered scalable backend  
+✅ **Interactive UI** - Intuitive Streamlit interface  
+✅ **Containerized** - Docker-based deployment  
+✅ **Multi-Model Support** - Configurable OpenAI models
 
-## Prerequisites
+<a name="architecture"></a>
+## 🏗️ Architecture
+
+```mermaid
+graph LR
+    A[User] --> B[Streamlit UI]
+    B --> C[FastAPI Backend]
+    C --> D[LangChain Agent]
+    D --> E[Neo4j Database]
+    D --> F[OpenAI API]
+```
+
+## 📋 Prerequisites
 
 - Docker and Docker Compose
 - OpenAI API access
 - Neo4j AuraDB instance
 - Python 3.8+
 
-## Installation
+## 🚀 Quick Start
 
 ### 1. Clone the Repository
 
 ```bash
-git clone [repository-url]
-cd healthcare-rag-chatbot
+git clone https://github.com/asanmateu/medgraph-ai
+cd medgraph-ai
 ```
 
 ### 2. Environment Configuration
 
-Create a `.env` file in the project root with the following variables:
+Create a `.env` file in the project root with the variables:
 
 ```bash
 # OpenAI Configuration
@@ -61,23 +90,15 @@ HOSPITAL_QA_MODEL=gpt-3.5-turbo-0125
 CHATBOT_URL=http://host.docker.internal:8000/hospital-rag-agent
 ```
 
-### 3. Build and Deploy
+### 3. Run with Docker
 
 Ensure your Neo4j AuraDB instance is running, then execute:
 
 ```bash
-make build
+make build && make start
 ```
 
-## Usage
-
-### Starting the Application
-
-```bash
-make start
-```
-
-### Stopping the Application
+### 4. Stopping the Application
 
 ```bash
 make stop
@@ -90,7 +111,15 @@ make stop
 
 <img width="1614" alt="Screenshot 2024-03-27 at 19 44 54" src="https://github.com/asanmateu/healthcare-rag-chatbot/assets/62403518/ef6de300-5dbd-41a0-b89f-34fbe94473bf">
 
-## Database Architecture
+## 💬 Example Queries
+
+Try asking the agent:
+- "Which hospitals have the highest patient satisfaction?"
+- "Show me physicians specializing in cardiology"
+- "What's the average wait time for emergency visits?"
+
+<a name="database-design"></a>
+## 🗄️ Database Design
 
 The application utilizes a graph database structure optimized for healthcare data relationships. Understanding this schema will help formulate effective queries.
 
@@ -110,7 +139,8 @@ Relationships between nodes contain additional contextual information:
 
 <img width="500" alt="Screenshot 2024-04-07 at 23 44 57" src="https://github.com/asanmateu/healthcare-rag-chatbot/assets/62403518/f6d8ebe5-e808-4e8e-9a4c-5e15d47fa25e">
 
-## Technical Stack
+<a name="technical-stack"></a>
+## 🛠️ Technical Stack
 
 - **LangChain**: Orchestration framework for LLM applications
 - **Neo4j**: Graph database for healthcare data storage
@@ -118,10 +148,6 @@ Relationships between nodes contain additional contextual information:
 - **Streamlit**: Interactive web application framework
 - **Docker**: Containerization platform
 - **OpenAI GPT-3.5**: Language model for natural language understanding
-
-## Contributing
-
-Contributions are welcome. Please ensure that any pull requests maintain the existing code style and include appropriate documentation updates.
 
 ## Acknowledgments
 
