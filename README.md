@@ -22,8 +22,6 @@ A Retrieval-Augmented Generation (RAG) agent designed for healthcare information
 
 This project implements a healthcare-focused RAG chatbot that leverages LangChain's capabilities for natural language processing and Neo4j's graph database for structured healthcare data storage. The application provides an intuitive interface for querying complex healthcare relationships and information.
 
-This project is based on Real Python's comprehensive LLM RAG Chatbot [tutorial](https://realpython.com/build-llm-rag-chatbot-with-langchain),
-
 ## ✨ Key Features
 
 ✅ **Knowledge Graph Integration** - Neo4j for healthcare data relationships  
@@ -151,5 +149,5 @@ Relationships between nodes contain additional contextual information:
 
 ## Acknowledgments
 
-This project builds upon the excellent foundation provided by Real Python's LLM RAG Chatbot tutorial.
+This project builds upon the excellent foundation provided by Real Python's LLM RAG Chatbot [tutorial](https://realpython.com/build-llm-rag-chatbot-with-langchain).
 
