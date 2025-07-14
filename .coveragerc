@@ -1,0 +1,26 @@
+[run]
+source = chatbot_api/src, chatbot_frontend/src, hospital_neo4j_etl/src
+omit =
+    */tests/*
+    */test_*
+    */__init__.py
+    */conftest.py
+    */migrations/*
+    */venv/*
+    */.venv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
+
+[html]
+directory = htmlcov

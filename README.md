@@ -1,6 +1,8 @@
-# Healthcare RAG Agent 
+# Healthcare RAG Agent
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![CI](https://github.com/asanmateu/medgraph-ai/workflows/CI/badge.svg)](https://github.com/asanmateu/medgraph-ai/actions)
+[![codecov](https://codecov.io/gh/asanmateu/medgraph-ai/branch/master/graph/badge.svg)](https://codecov.io/gh/asanmateu/medgraph-ai)
+[![Python](https://img.shields.io/badge/Python-3.9%20|%203.11-blue.svg)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-Latest-green.svg)](https://langchain.com/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.0+-blue.svg)](https://neo4j.com/)
 [![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://www.docker.com/)
@@ -16,6 +18,7 @@ A Retrieval-Augmented Generation (RAG) agent designed for healthcare information
 - [Example Queries](#-example-queries)
 - [Database Design](#database-design)
 - [Technical Stack](#technical-stack)
+- [Contributing](#-contributing)
 - [Acknowledgments](#acknowledgments)
 
 ## 🎯 Overview
@@ -24,10 +27,10 @@ This project implements a healthcare-focused RAG chatbot that leverages LangChai
 
 ## ✨ Key Features
 
-✅ **Knowledge Graph Integration** - Neo4j for healthcare data relationships  
-✅ **RESTful API** - FastAPI-powered scalable backend  
-✅ **Interactive UI** - Intuitive Streamlit interface  
-✅ **Containerized** - Docker-based deployment  
+✅ **Knowledge Graph Integration** - Neo4j for healthcare data relationships
+✅ **RESTful API** - FastAPI-powered scalable backend
+✅ **Interactive UI** - Intuitive Streamlit interface
+✅ **Containerized** - Docker-based deployment
 ✅ **Multi-Model Support** - Configurable OpenAI models
 
 <a name="architecture"></a>
@@ -147,7 +150,10 @@ Relationships between nodes contain additional contextual information:
 - **Docker**: Containerization platform
 - **OpenAI GPT-3.5**: Language model for natural language understanding
 
-## Acknowledgments
+## 🤝 Contributing
+
+Contributions are welcome. Please ensure that any pull requests maintain the existing code style and include appropriate tests and documentation updates.
+
+## 🙏 Acknowledgments
 
 This project builds upon the excellent foundation provided by Real Python's LLM RAG Chatbot [tutorial](https://realpython.com/build-llm-rag-chatbot-with-langchain).
-

@@ -1,4 +1,5 @@
 import os
+from typing import Optional, List, Union
 from langchain.vectorstores.neo4j_vector import Neo4jVector
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -9,9 +10,9 @@ from langchain.prompts import (
     ChatPromptTemplate,
 )
 
-HOSPITAL_QA_MODEL = os.getenv("HOSPITAL_QA_MODEL")
+HOSPITAL_QA_MODEL: Optional[str] = os.getenv("HOSPITAL_QA_MODEL")
 
-neo4j_vector_index = Neo4jVector.from_existing_graph(
+neo4j_vector_index: Neo4jVector = Neo4jVector.from_existing_graph(
     embedding=OpenAIEmbeddings(),
     url=os.getenv("NEO4J_URI"),
     username=os.getenv("NEO4J_USERNAME"),
@@ -27,7 +28,7 @@ neo4j_vector_index = Neo4jVector.from_existing_graph(
     embedding_node_property="embedding",
 )
 
-review_template = """Your job is to use patient
+review_template: str = """Your job is to use patient
 reviews to answer questions about their experience at a hospital. Use
 the following context to answer questions. Be as detailed as possible, but
 don't make up any information that's not from the context. If you don't know
@@ -35,20 +36,23 @@ an answer, say you don't know.
 {context}
 """
 
-review_system_prompt = SystemMessagePromptTemplate(
+review_system_prompt: SystemMessagePromptTemplate = SystemMessagePromptTemplate(
     prompt=PromptTemplate(input_variables=["context"], template=review_template)
 )
 
-review_human_prompt = HumanMessagePromptTemplate(
+review_human_prompt: HumanMessagePromptTemplate = HumanMessagePromptTemplate(
     prompt=PromptTemplate(input_variables=["question"], template="{question}")
 )
-messages = [review_system_prompt, review_human_prompt]
+messages: List[Union[SystemMessagePromptTemplate, HumanMessagePromptTemplate]] = [
+    review_system_prompt,
+    review_human_prompt,
+]
 
-review_prompt = ChatPromptTemplate(
+review_prompt: ChatPromptTemplate = ChatPromptTemplate(
     input_variables=["context", "question"], messages=messages
 )
 
-reviews_vector_chain = RetrievalQA.from_chain_type(
+reviews_vector_chain: RetrievalQA = RetrievalQA.from_chain_type(
     llm=ChatOpenAI(model=HOSPITAL_QA_MODEL, temperature=0),
     chain_type="stuff",
     retriever=neo4j_vector_index.as_retriever(k=12),

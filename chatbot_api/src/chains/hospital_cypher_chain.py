@@ -1,13 +1,14 @@
 import os
+from typing import Optional
 from langchain_community.graphs import Neo4jGraph
 from langchain.chains import GraphCypherQAChain
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
-HOSPITAL_QA_MODEL = os.getenv("HOSPITAL_QA_MODEL")
-HOSPITAL_CYPHER_MODEL = os.getenv("HOSPITAL_CYPHER_MODEL")
+HOSPITAL_QA_MODEL: Optional[str] = os.getenv("HOSPITAL_QA_MODEL")
+HOSPITAL_CYPHER_MODEL: Optional[str] = os.getenv("HOSPITAL_CYPHER_MODEL")
 
-graph = Neo4jGraph(
+graph: Neo4jGraph = Neo4jGraph(
     url=os.getenv("NEO4J_URI"),
     username=os.getenv("NEO4J_USERNAME"),
     password=os.getenv("NEO4J_PASSWORD"),
@@ -16,7 +17,7 @@ graph = Neo4jGraph(
 graph.refresh_schema()
 
 
-cypher_generation_template = """
+cypher_generation_template: str = """
 Task:
 Generate Cypher query for a Neo4j graph database.
 
@@ -102,12 +103,12 @@ The question is:
 {question}
 """
 
-cypher_generation_prompt = PromptTemplate(
+cypher_generation_prompt: PromptTemplate = PromptTemplate(
     input_variables=["schema", "question"], template=cypher_generation_template
 )
 
 
-qa_generation_template = """You are an assistant that takes the results
+qa_generation_template: str = """You are an assistant that takes the results
 from a Neo4j Cypher query and forms a human-readable response. The
 query results section contains the results of a Cypher query that was
 generated based on a users natural language question. The provided
@@ -141,12 +142,12 @@ the query results. Always use the data in the query results.
 Helpful Answer:
 """
 
-qa_generation_prompt = PromptTemplate(
+qa_generation_prompt: PromptTemplate = PromptTemplate(
     input_variables=["context", "question"], template=qa_generation_template
 )
 
 
-hospital_cypher_chain = GraphCypherQAChain.from_llm(
+hospital_cypher_chain: GraphCypherQAChain = GraphCypherQAChain.from_llm(
     cypher_llm=ChatOpenAI(model=HOSPITAL_CYPHER_MODEL, temperature=0),
     qa_llm=ChatOpenAI(model=HOSPITAL_QA_MODEL, temperature=0),
     graph=graph,

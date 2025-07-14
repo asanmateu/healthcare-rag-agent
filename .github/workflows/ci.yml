@@ -1,0 +1,142 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: "**/pyproject.toml"
+
+    - name: Set up Python 3.11
+      run: uv python install 3.11
+
+    - name: Create virtual environment and install dependencies
+      run: |
+        uv venv --python 3.11
+        uv pip install -e "chatbot_api[dev]" -e "chatbot_frontend[dev]" -e "hospital_neo4j_etl[dev]"
+
+    - name: Run linting and formatting checks
+      run: |
+        uv run ruff check chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+        uv run ruff format --check chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+
+    - name: Run type checking
+      run: uv run mypy chatbot_api/src/
+
+  unit-tests:
+    name: Unit Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: "**/pyproject.toml"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Create virtual environment and install dependencies
+      run: |
+        uv venv --python ${{ matrix.python-version }}
+        uv pip install -e "chatbot_api[dev]" -e "chatbot_frontend[dev]" -e "hospital_neo4j_etl[dev]"
+
+    - name: Run unit tests with coverage
+      run: make test-unit
+
+  integration-tests:
+    name: Integration Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: "**/pyproject.toml"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Create virtual environment and install dependencies
+      run: |
+        uv venv --python ${{ matrix.python-version }}
+        uv pip install -e "chatbot_api[dev]" -e "chatbot_frontend[dev]" -e "hospital_neo4j_etl[dev]"
+
+    - name: Run integration tests with coverage
+      run: |
+        uv run pytest tests/integration/ -v --cov=chatbot_api/src --cov=chatbot_frontend/src --cov=hospital_neo4j_etl/src
+
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == '3.11'  # Only upload once
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  build-validation:
+    name: Docker Build Validation
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, 'docker') || contains(github.event.head_commit.message, 'Docker') || github.event_name == 'pull_request' }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check for Docker-related changes
+      uses: dorny/paths-filter@v2
+      id: docker-changes
+      with:
+        filters: |
+          docker:
+            - 'docker-compose.yml'
+            - '**/Dockerfile'
+            - '.dockerignore'
+
+    - name: Create dummy .env file for Docker build
+      if: steps.docker-changes.outputs.docker == 'true' || github.event_name == 'pull_request'
+      run: |
+        cat > .env << 'EOF'
+        # Dummy environment variables for CI build validation
+        OPENAI_API_KEY=sk-dummy-key-for-ci-build-only
+        NEO4J_URI=neo4j://localhost:7687
+        NEO4J_USERNAME=neo4j
+        NEO4J_PASSWORD=password
+        HOSPITAL_AGENT_MODEL=gpt-3.5-turbo
+        HOSPITAL_CYPHER_MODEL=gpt-3.5-turbo
+        HOSPITAL_QA_MODEL=gpt-3.5-turbo
+        CHATBOT_URL=http://localhost:8000/hospital-rag-agent
+        EOF
+
+    - name: Validate Docker Compose build
+      if: steps.docker-changes.outputs.docker == 'true' || github.event_name == 'pull_request'
+      run: |
+        docker compose build --no-cache
+        docker compose config --quiet
