@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/asanmateu/medgraph-ai/workflows/CI/badge.svg)](https://github.com/asanmateu/medgraph-ai/actions)
 [![codecov](https://codecov.io/gh/asanmateu/medgraph-ai/branch/master/graph/badge.svg)](https://codecov.io/gh/asanmateu/medgraph-ai)
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.9%20|%203.11-blue.svg)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-Latest-green.svg)](https://langchain.com/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.0+-blue.svg)](https://neo4j.com/)
 [![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://www.docker.com/)

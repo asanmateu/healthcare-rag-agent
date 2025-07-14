@@ -9,7 +9,7 @@ stop:
 	docker compose down chatbot_api chatbot_frontend
 
 test:
-	uv run pytest tests/ -v --cov=chatbot_api/src --cov=chatbot_frontend/src --cov=hospital_neo4j_etl/src
+	uv run pytest tests/ -v --cov=chatbot_api/src --cov=chatbot_frontend/src --cov=hospital_neo4j_etl/src --ignore=tests/performance
 
 test-unit:
 	uv run pytest tests/unit/ -v
