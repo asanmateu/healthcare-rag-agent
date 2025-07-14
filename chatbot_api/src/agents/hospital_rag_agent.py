@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 from langchain_openai import ChatOpenAI
 from langchain.agents import (
     create_openai_functions_agent,
@@ -6,6 +7,7 @@ from langchain.agents import (
     AgentExecutor,
 )
 from langchain import hub
+from langchain.schema import BasePromptTemplate
 from chains.hospital_review_chain import reviews_vector_chain
 from chains.hospital_cypher_chain import hospital_cypher_chain
 from tools.wait_times import (
@@ -13,12 +15,12 @@ from tools.wait_times import (
     get_most_available_hospital,
 )
 
-HOSPITAL_AGENT_MODEL = os.getenv("HOSPITAL_AGENT_MODEL")
+HOSPITAL_AGENT_MODEL: Optional[str] = os.getenv("HOSPITAL_AGENT_MODEL")
 
-hospital_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
+hospital_agent_prompt: BasePromptTemplate = hub.pull("hwchase17/openai-functions-agent")
 
 
-tools = [
+tools: List[Tool] = [
     Tool(
         name="Experiences",
         func=reviews_vector_chain.invoke,
@@ -68,7 +70,7 @@ tools = [
 ]
 
 
-chat_model = ChatOpenAI(
+chat_model: ChatOpenAI = ChatOpenAI(
     model=HOSPITAL_AGENT_MODEL,
     temperature=0,
 )
@@ -79,7 +81,7 @@ hospital_rag_agent = create_openai_functions_agent(
     tools=tools,
 )
 
-hospital_rag_agent_executor = AgentExecutor(
+hospital_rag_agent_executor: AgentExecutor = AgentExecutor(
     agent=hospital_rag_agent,
     tools=tools,
     return_intermediate_steps=True,
