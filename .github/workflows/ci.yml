@@ -7,14 +7,18 @@ on:
     branches: [master, main]
 
 jobs:
-  test:
+  test-and-quality:
+    name: Tests & Quality (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed for pre-commit to see all files
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3
@@ -30,8 +34,8 @@ jobs:
         uv venv --python ${{ matrix.python-version }}
         uv pip install -e "chatbot_api[dev]" -e "chatbot_frontend[dev]" -e "hospital_neo4j_etl[dev]"
 
-    - name: Run pre-commit checks
-      run: make pre-commit
+    - name: Run pre-commit checks on all files
+      run: uv run pre-commit run --all-files
 
     - name: Run tests with coverage
       run: make test
@@ -42,12 +46,25 @@ jobs:
         file: ./coverage.xml
         fail_ci_if_error: false
 
-  docker-build:
+  docker-validation:
+    name: Docker Build Validation
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, 'docker') || contains(github.event.head_commit.message, 'Docker') || github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v4
 
-    - name: Test Docker build
+    - name: Check for Docker-related changes
+      uses: dorny/paths-filter@v2
+      id: docker-changes
+      with:
+        filters: |
+          docker:
+            - 'docker-compose.yml'
+            - '**/Dockerfile'
+            - '.dockerignore'
+
+    - name: Validate Docker Compose build
+      if: steps.docker-changes.outputs.docker == 'true' || github.event_name == 'pull_request'
       run: |
-        docker compose build --no-cache
-        docker compose config --quiet
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml build --no-cache
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml config --quiet

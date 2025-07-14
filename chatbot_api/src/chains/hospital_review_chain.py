@@ -1,5 +1,5 @@
 import os
-from typing import Optional, List
+from typing import Optional, List, Union
 from langchain.vectorstores.neo4j_vector import Neo4jVector
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -43,7 +43,7 @@ review_system_prompt: SystemMessagePromptTemplate = SystemMessagePromptTemplate(
 review_human_prompt: HumanMessagePromptTemplate = HumanMessagePromptTemplate(
     prompt=PromptTemplate(input_variables=["question"], template="{question}")
 )
-messages: List[SystemMessagePromptTemplate | HumanMessagePromptTemplate] = [
+messages: List[Union[SystemMessagePromptTemplate, HumanMessagePromptTemplate]] = [
     review_system_prompt,
     review_human_prompt,
 ]
