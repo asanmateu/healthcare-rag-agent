@@ -9,20 +9,28 @@ stop:
 	docker compose down chatbot_api chatbot_frontend
 
 test:
-	pytest tests/ -v --cov=chatbot_api/src --cov=chatbot_frontend/src --cov=hospital_neo4j_etl/src
+	uv run pytest tests/ -v --cov=chatbot_api/src --cov=chatbot_frontend/src --cov=hospital_neo4j_etl/src
 
 test-unit:
-	pytest tests/unit/ -v
+	uv run pytest tests/unit/ -v
 
 test-integration:
-	pytest tests/integration/ -v
+	uv run pytest tests/integration/ -v
 
 format:
-	black chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
-	
+	uv run ruff format chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+
 lint:
-	flake8 chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+	uv run ruff check chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+
+format-check:
+	uv run ruff format --check chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+
+lint-fix:
+	uv run ruff check --fix chatbot_api/src/ chatbot_frontend/src/ hospital_neo4j_etl/src/ tests/
+
+pre-commit:
+	uv run pre-commit run --all-files
 
 install-dev:
 	uv pip install -e "chatbot_api[dev]" -e "chatbot_frontend[dev]" -e "hospital_neo4j_etl[dev]"
-

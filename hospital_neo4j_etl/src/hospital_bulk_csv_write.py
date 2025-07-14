@@ -38,9 +38,7 @@ def load_hospital_graph_from_csv() -> None:
     """Load structured hospital CSV data following
     a specific ontology into Neo4j"""
 
-    driver = GraphDatabase.driver(
-        NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD)
-    )
+    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
 
     LOGGER.info("Setting uniqueness constraints on nodes")
     with driver.session(database="neo4j") as session:

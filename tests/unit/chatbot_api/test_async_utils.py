@@ -42,7 +42,7 @@ class TestAsyncRetry:
 
         with pytest.raises(ValueError, match="Failed after 2 attempts"):
             await always_failing_function()
-        
+
         assert call_count == 2
 
     @pytest.mark.asyncio
@@ -57,7 +57,7 @@ class TestAsyncRetry:
                 raise Exception("First failure")
             return "success"
 
-        with patch('asyncio.sleep') as mock_sleep:
+        with patch("asyncio.sleep") as mock_sleep:
             result = await function_with_custom_delay()
             assert result == "success"
             mock_sleep.assert_called_once_with(0.01)

@@ -26,8 +26,7 @@ with st.sidebar:
     )
     st.markdown("- What is the average duration in days for closed emergency visits?")
     st.markdown(
-        "- What are patients saying about the nursing staff at "
-        "Castaneda-Hardy?"
+        "- What are patients saying about the nursing staff at Castaneda-Hardy?"
     )
     st.markdown("- What was the total billing amount charged to each payer for 2023?")
     st.markdown("- What is the average billing amount for medicaid visits?")

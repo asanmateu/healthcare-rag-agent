@@ -1,7 +1,7 @@
 import pytest
 import os
 from unittest.mock import Mock, AsyncMock
-from typing import Generator, AsyncGenerator
+from typing import Generator
 
 
 @pytest.fixture(scope="session")
@@ -36,10 +36,7 @@ def mock_openai_client():
 
 @pytest.fixture
 def sample_hospital_data():
-    return [
-        {"hospital_name": "Test Hospital"},
-        {"hospital_name": "Another Hospital"}
-    ]
+    return [{"hospital_name": "Test Hospital"}, {"hospital_name": "Another Hospital"}]
 
 
 @pytest.fixture
@@ -52,5 +49,5 @@ def sample_agent_response():
     return {
         "input": "Test query",
         "output": "Test response",
-        "intermediate_steps": ["Step 1", "Step 2"]
+        "intermediate_steps": ["Step 1", "Step 2"],
     }
