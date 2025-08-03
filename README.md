@@ -24,11 +24,11 @@ This project implements a healthcare-focused RAG chatbot that leverages LangChai
 
 ## ✨ Key Features
 
-✅ **Knowledge Graph Integration** - Neo4j for healthcare data relationships  
-✅ **RESTful API** - FastAPI-powered scalable backend  
-✅ **Interactive UI** - Intuitive Streamlit interface  
-✅ **Containerized** - Docker-based deployment  
-✅ **Multi-Model Support** - Configurable OpenAI models
+* **Knowledge Graph Integration** - Neo4j for healthcare data relationships  
+* **RESTful API** - FastAPI-powered scalable backend  
+* **Interactive UI** - Intuitive Streamlit interface  
+* **Containerized** - Docker-based deployment  
+* **Multi-Model Support** - Configurable OpenAI models
 
 <a name="architecture"></a>
 ## 🏗️ Architecture
@@ -150,4 +150,5 @@ Relationships between nodes contain additional contextual information:
 ## Acknowledgments
 
 This project builds upon the excellent foundation provided by Real Python's LLM RAG Chatbot [tutorial](https://realpython.com/build-llm-rag-chatbot-with-langchain).
+
 
